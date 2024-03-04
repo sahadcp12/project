@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        welcome to ABC store where you can buy different items...
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }} - ABC Store
+    {% else %}
+        see our new collection - ABC Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+
+    <div>
+        <div class="row my_row_class">
+            <div class="mx_auto">
+            <p><a href="{% url 'shop_app:allprodcat' %}"Our Product Collection></a></p>
+        </div>
+            </div>
+    </div>
+    {% endif %}
+<div class="my_auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="350px;">
+</div>
+     <br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+     {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="1250px;">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">Our Product Collections</h1>
+    <p class="text-justify">In the future, online shopping is definitely going bigger and better. The Internet of Things is already bringing a wide range of exciting, innovative solutions. Sensors in parking lots will indicate space availability. Users could make their favourite beverage with voice instructions, or instructions to the smartphone can close the blinds in the living room while residents are far away on vacation</p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9  col-sm-12  col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                  <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="190px;"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+               <a href="?page={{pg}}"  class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">}{{pg}}a></a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+{% endblock %}
